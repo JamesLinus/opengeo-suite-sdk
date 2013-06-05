@@ -35,6 +35,7 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
     workspaceEmptyText: "Default workspace",
     dataStoreLabel: "Store",
     dataStoreEmptyText: "Create new store",
+    defaultDataStoreEmptyText: "Default data store",
     crsLabel: "CRS",
     crsEmptyText: "Coordinate Reference System ID",
     invalidCrsText: "CRS identifier should be an EPSG code (e.g. EPSG:4326)",
@@ -56,6 +57,11 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
      *  ``String``
      *  URL for GeoServer RESTConfig root.  E.g. "http://example.com/geoserver/rest".
      */
+    
+    /** private: property[defaultDataStore]
+     *  ``string``
+     */
+    defaultDataStore: null,
     
     /** private: method[constructor]
      */
@@ -91,6 +97,7 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
         }, {
             xtype: "fileuploadfield",
             id: "file",
+            anchor: "90%",
             emptyText: this.fieldEmptyText,
             fieldLabel: this.fileLabel,
             name: "file",
@@ -145,16 +152,14 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
                 var form = this.getForm();
                 if (form.isValid()) {
                     var fields = form.getFieldValues(),
-                        jsonData;
+                        jsonData = {'import': {}};
                     if (fields.workspace) {
-                        jsonData = {
-                            "import": {
-                                targetWorkspace: {workspace: {name: fields.workspace}}
-                            }
-                        }
+                        jsonData["import"].targetWorkspace = {workspace: {name: fields.workspace}};
                     }
                     if (fields.store) {
                         jsonData["import"].targetStore = {dataStore: {name: fields.store}}
+                    } else if (this.defaultDataStore) {
+                        jsonData["import"].targetStore = {dataStore: {name: this.defaultDataStore}}                        
                     }
                     Ext.Ajax.request({
                         url: this.getUploadUrl(),
@@ -164,7 +169,6 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
                             this._import = response.getResponseHeader("Location");
                             form.submit({
                                 url: this._import + "/tasks",
-                                submitEmptyText: false,
                                 waitMsg: this.waitMsgText,
                                 waitMsgTarget: true,
                                 reset: true,
@@ -210,7 +214,9 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
              *     GeoServer's Importer API.
              */
             "uploadcomplete"
-        ); 
+        );
+        
+        this.getDefaultDataStore('default');
 
         gxp.LayerUploadPanel.superclass.initComponent.call(this);
 
@@ -240,6 +246,7 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
         return {
             xtype: "combo",
             name: "workspace",
+            ref: "../workspace",
             fieldLabel: this.workspaceLabel,
             emptyText: this.workspaceEmptyText,
             store: new Ext.data.JsonStore({
@@ -256,6 +263,7 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
             editable: false,
             listeners: {
                 select: function(combo, record, index) {
+                    this.getDefaultDataStore(record.get('name'));
                     this.fireEvent("workspaceselected", this, record);
                 },
                 scope: this
@@ -288,6 +296,7 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
 
         var combo = new Ext.form.ComboBox({
             name: "store",
+            ref: "../dataStore",
             fieldLabel: this.dataStoreLabel,
             emptyText: this.dataStoreEmptyText,
             store: store,
@@ -306,6 +315,30 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
         });
         
         return combo;
+    },
+
+    getDefaultDataStore: function(workspace) {
+        Ext.Ajax.request({
+            url: this.url + '/workspaces/' + workspace + '/datastores/default.json',
+            callback: function(options, success, response) {
+                this.defaultDataStore = null;
+                this.dataStore.emptyText = this.dataStoreEmptyText;
+                this.dataStore.setValue('');
+                if (response.status === 200) {
+                    var json = Ext.decode(response.responseText);
+                    //TODO Revisit this logic - currently we assume that stores
+                    // with the substring "file" in the type are file based,
+                    // and for file-based data stores we want to crate a new
+                    // store.
+                    if (json.dataStore && json.dataStore.enabled === true && !/file/i.test(json.dataStore.type)) {
+                        this.defaultDataStore = json.dataStore.name;
+                        this.dataStore.emptyText = this.defaultDataStoreEmptyText;
+                        this.dataStore.setValue('');
+                    }
+                }
+            },
+            scope: this
+        });
     },
 
     /** private: method[getUploadUrl]
@@ -329,13 +362,27 @@ gxp.LayerUploadPanel = Ext.extend(Ext.FormPanel, {
             records, tasks, task, msg, i,
             success = true;
         if (obj) {
-            tasks = obj.tasks || [obj.task];
-            for (i=tasks.length-1; i>=0; --i) {
-                task = tasks[i];
-                if (task.state !== "READY") {
+            if (typeof obj === "string") {
+                success = false;
+                msg = obj;
+            } else {
+                tasks = obj.tasks || [obj.task];
+                if (tasks.length === 0) {
                     success = false;
-                    msg = "Source " + task.source.file + " is " + task.state;
-                    break;
+                    msg = "Upload contains no suitable files.";
+                } else {
+                    for (i=tasks.length-1; i>=0; --i) {
+                        task = tasks[i];
+                        if (!task) {
+                            success = false;
+                            msg = "Unknown upload error";
+                            break;
+                        } else if (task.state !== "READY") {
+                            success = false;
+                            msg = "Source " + task.source.file + " is " + task.state;
+                            break;
+                        }
+                    }
                 }
             }
         }

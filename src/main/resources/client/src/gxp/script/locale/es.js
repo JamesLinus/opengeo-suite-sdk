@@ -31,6 +31,9 @@ GeoExt.Lang.add("es", {
     },    
 
     "gxp.plugins.FeatureEditor.prototype": {
+        splitButtonText: "Edit",
+        createFeatureActionText: "Create",
+        editFeatureActionText: "Modify",
         createFeatureActionTip: "Crear nuevo elemento",
         editFeatureActionTip: "Editar elemento existente"
     },
@@ -42,7 +45,7 @@ GeoExt.Lang.add("es", {
         zoomPageExtentTip: "Zoom a la extensión de la página",
         nextPageTip: "Página siguiente",
         lastPageTip: "Última página",
-        totalMsg: "Total: {0} records"
+        totalMsg: "Features {1} to {2} of {0}"
     },
 
     "gxp.plugins.GoogleEarth.prototype": {
@@ -101,6 +104,7 @@ GeoExt.Lang.add("es", {
     },
 
     "gxp.plugins.Measure.prototype": {
+        buttonText: "Medir",
         lengthMenuText: "Longitud",
         areaMenuText: "Área",
         lengthTooltip: "Medir Longitud",
@@ -122,11 +126,12 @@ GeoExt.Lang.add("es", {
 
     "gxp.plugins.OSMSource.prototype": {
         title: "Capas OpenStreetMap",
-        mapnikAttribution: "Datos CC-By-SA de <a href='http://openstreetmap.org/'>OpenStreetMap</a>",
+        mapnikAttribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
         osmarenderAttribution: "Datos CC-By-SA de <a href='http://openstreetmap.org/'>OpenStreetMap</a>"
     },
 
     "gxp.plugins.Print.prototype": {
+        buttonText:"Imprimir",
         menuText: "Imprimir mapa",
         tooltip: "Imprimir mapa",
         previewText: "Vista previa",
@@ -146,8 +151,7 @@ GeoExt.Lang.add("es", {
         queryActionText: "Consultar",
         queryMenuText: "Consultar capa",
         queryActionTip: "Consultar la capa seleccionada",
-        queryByLocationText: "Consultar por localización",
-        currentTextText: "Extensión actual",
+        queryByLocationText: "Query by current map extent",
         queryByAttributesText: "Consultar por atributos",
         queryMsg: "Consultando...",
         cancelButtonText: "Cancelar",
@@ -166,13 +170,16 @@ GeoExt.Lang.add("es", {
     },
 
     "gxp.plugins.WMSGetFeatureInfo.prototype": {
+        buttonText:"Identify",
         infoActionTip: "Consultar elementos",
         popupTitle: "Información de elementos"
     },
 
     "gxp.plugins.Zoom.prototype": {
+        zoomMenuText: "Zoom Box",
         zoomInMenuText: "Acercar",
         zoomOutMenuText: "Alejar",
+        zoomTooltip: "Zoom by dragging a box",
         zoomInTooltip: "Acercar",
         zoomOutTooltip: "Alejar"
     },
@@ -368,7 +375,8 @@ GeoExt.Lang.add("es", {
         workspaceLabel: "Espacio de trabajo",
         workspaceEmptyText: "Espacio de trabajo por defecto",
         dataStoreLabel: "Almacén de datos",
-        dataStoreEmptyText: "Create new store"
+        dataStoreEmptyText: "Create new store",
+        defaultDataStoreEmptyText: "Almacén de datos por defecto"
     },
     
     "gxp.NewSourceDialog.prototype": {

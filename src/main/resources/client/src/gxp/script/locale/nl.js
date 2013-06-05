@@ -33,7 +33,7 @@ GeoExt.Lang.add("nl", {
         zoomPageExtentTip: "Zoom naar de uitsnede van de pagina",
         nextPageTip: "Volgende pagina",
         lastPageTip: "Laatste pagina",
-        totalMsg: "Totaal: {0} rijen"
+        totalMsg: "Features {1} to {2} of {0}"
     },
 
     "gxp.plugins.GoogleEarth.prototype": {
@@ -92,6 +92,10 @@ GeoExt.Lang.add("nl", {
     },
 
     "gxp.plugins.Measure.prototype": {
+        splitButtonText: "Edit",
+        createFeatureActionText: "Create",
+        editFeatureActionText: "Modify",
+        buttonText: "Meten",
         lengthMenuText: "Lengte",
         areaMenuText: "Oppervlakte",
         lengthTooltip: "Meet lengte",
@@ -113,11 +117,12 @@ GeoExt.Lang.add("nl", {
 
     "gxp.plugins.OSMSource.prototype": {
         title: "OpenStreetMap kaartlagen",
-        mapnikAttribution: "Data CC-By-SA by <a href='http://openstreetmap.org/'>OpenStreetMap</a>",
+        mapnikAttribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
         osmarenderAttribution: "Data CC-By-SA by <a href='http://openstreetmap.org/'>OpenStreetMap</a>"
     },
 
     "gxp.plugins.Print.prototype": {
+        buttonText:"Afdrukken",
         menuText: "Afdrukken kaart",
         tooltip: "Afdrukken kaart",
         previewText: "Voorvertoning",
@@ -137,8 +142,7 @@ GeoExt.Lang.add("nl", {
         queryActionText: "Bevraag",
         queryMenuText: "Bevraag kaartlaag",
         queryActionTip: "Bevraag de geselecteerde kaartlaag",
-        queryByLocationText: "Bevraag middels locatie",
-        currentTextText: "Huidige uitsnede",
+        queryByLocationText: "Query by current map extent",
         queryByAttributesText: "Bevraag middels attributen",
         queryMsg: "Bevragen...",
         cancelButtonText: "Annuleren",
@@ -152,13 +156,16 @@ GeoExt.Lang.add("nl", {
     },
 
     "gxp.plugins.WMSGetFeatureInfo.prototype": {
+        buttonText:"Identify",
         infoActionTip: "Attribuut-informatie",
         popupTitle: "Attribuut-informatie"
     },
 
     "gxp.plugins.Zoom.prototype": {
+        zoomMenuText: "Zoom Box",
         zoomInMenuText: "Inzoomen",
         zoomOutMenuText: "Uitzoomen",
+        zoomTooltip: "Zoom by dragging a box",
         zoomInTooltip: "Inzoomen",
         zoomOutTooltip: "Uitzoomen"
     },
@@ -330,7 +337,8 @@ GeoExt.Lang.add("nl", {
         workspaceLabel: "Werkruimte",
         workspaceEmptyText: "Standaard werkruimte",
         dataStoreLabel: "Archief",
-        dataStoreEmptyText: "Create new store"
+        dataStoreEmptyText: "Create new store",
+        defaultDataStoreEmptyText: "Standaard archief"
     },
 
     "gxp.NewSourceDialog.prototype": {

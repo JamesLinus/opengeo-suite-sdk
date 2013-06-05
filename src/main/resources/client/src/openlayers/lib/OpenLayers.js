@@ -132,6 +132,7 @@
             jsFiles = [
                 "OpenLayers/BaseTypes/Class.js",
                 "OpenLayers/Util.js",
+                "OpenLayers/Util/vendorPrefix.js",
                 "OpenLayers/Animation.js",
                 "OpenLayers/BaseTypes.js",
                 "OpenLayers/BaseTypes/Bounds.js",
@@ -393,7 +394,9 @@
                 "OpenLayers/Symbolizer/Raster.js",
                 "OpenLayers/Lang.js",
                 "OpenLayers/Lang/en.js",
-                "OpenLayers/Spherical.js"
+                "OpenLayers/Spherical.js",
+                "OpenLayers/WPSClient.js",
+                "OpenLayers/WPSProcess.js"
             ]; // etc.
         }
 
@@ -414,4 +417,4 @@
 /**
  * Constant: VERSION_NUMBER
  */
-OpenLayers.VERSION_NUMBER="Release 2.12-rc4";
+OpenLayers.VERSION_NUMBER="Release 2.13 dev";

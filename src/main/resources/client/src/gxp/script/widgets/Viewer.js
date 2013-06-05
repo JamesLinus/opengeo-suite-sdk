@@ -563,13 +563,6 @@ gxp.Viewer = Ext.extend(Ext.util.Observable, {
                 }
             }
             
-            // sort background records so visible layers are first
-            // this is largely a workaround for an OpenLayers Google Layer issue
-            // http://trac.openlayers.org/ticket/2661
-            baseRecords.sort(function(a, b) {
-                return a.getLayer().visibility < b.getLayer().visibility;
-            });
-            
             var panel = this.mapPanel;
             var map = panel.map;
             
@@ -756,8 +749,9 @@ gxp.Viewer = Ext.extend(Ext.util.Observable, {
          * authorizedRoles to be a list of roles for which the user is 
          * authorized.
          */
-        var authorized = false;
+        var authorized = true;
         if (this.authorizedRoles) {
+            authorized = false;
             if (!roles) {
                 roles = "ROLE_ADMINISTRATOR";
             }
